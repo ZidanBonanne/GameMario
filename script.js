@@ -111,7 +111,11 @@ const gameEnd = function(){
     gameOver.style.display = "block"
     // document.addEventListener("keydown", reiniciarGame)
 }
+// computador 
 document.addEventListener("keydown", StartGame)
 document.addEventListener("keydown", jumpPC)
-document.addEventListener("touchstart", jumpCelular)
 document.addEventListener("keydown", reiniciarGame)
+//  celular 
+document.addEventListener("touchstart", StartGame)
+document.addEventListener("touchstart", reiniciarGame)
+document.addEventListener("touchstart", jumpCelular)
