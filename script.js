@@ -7,33 +7,41 @@ const nuvem2= document.querySelector(".nuvem2")
 const gameOver = document.querySelector(".gameOver")
 const comecaGame = document.querySelector(".comecaGame")
 const telaInicial = document.querySelector("#telaInicial")
-
+const score = document.querySelector(".score")
 var timer;
-const time = function() {
+let recorde;
+let comecarGame = true
+let reinicia = false
+let contagemScore =0
+const time = function() { 
     timer =  setInterval(() => {
-    const ingrementarContador = +contador.textContent.slice(2) + 1
-    contador.textContent =  `HI ${ingrementarContador}`
+    const ingrementarContador = contagemScore += 1
+    contador.textContent =  `Score: ${ingrementarContador}`
     }, 100)
 }
 const jumpPC = function(event) {
     if(event.code === "Space" || event.code === "ArrowUp"){
+        if (contagemScore !== 0){
         setTimeout(()=>{
             imgMario.classList.remove("jump") 
         },500)
             imgMario.classList.add("jump")  
     }
 }
+}
 const jumpCelular =  function(){
-   
-    setTimeout(()=>{
-        imgMario.classList.remove("jump")
-    },500)
-    imgMario.classList.add("jump")
-
+    if (contagemScore !== 0){
+        setTimeout(()=>{
+            imgMario.classList.remove("jump")
+        },500)
+        imgMario.classList.add("jump")
+    }
 }
 var loop;
 const verificarLoop = function(){
+     
     loop = setInterval(()=>{
+       
         const tuboPosition = tubo.offsetLeft
         const nuvem1Position = nuvem1.offsetLeft
         const nuvem2Position = nuvem2.offsetLeft
@@ -45,7 +53,9 @@ const verificarLoop = function(){
             stopNuvens(nuvem1,nuvem2,nuvem1Position,nuvem2Position)
             reinicia = true
             stopInterval()
-            gameEnd() 
+            gameEnd()
+            setLocalStorage(+recorde,+contagemScore)
+            contagemScore = 0
         }
     },10)
     
@@ -54,25 +64,25 @@ const stopInterval = function(){
     clearInterval(loop)
     clearInterval(timer)
 }
-let comecarGame = true
-let reinicia = false
+
 const StartGame = function(){
+    getLocalStorage()
     if(comecarGame){
+        iniciarJump()
         stopInterval()
-        // telaInicial.classList.remove("comecaGame")
         telaInicial.style.display = "none";
         nuvem1.classList.add("nuvem1Movendo");
         nuvem2.classList.add("nuvem2Movendo");
         tubo.classList.add("tuboMovendo");
         imgMario.style.display = "block";
-        historico.style.display = "block";
+        historico.style.display = "inline";
+        score.textContent = `Recorde ${recorde}`
         tubo.style.display  = "block";
         nuvem1.style.display  = "block";
         nuvem2.style.display  = "block";
         verificarLoop()
         time()
-        comecarGame = false
-        
+        comecarGame = false  
     }
 }
 
@@ -83,7 +93,6 @@ const reiniciarGame =  function(){
         nuvem1.removeAttribute("style")
         nuvem2.removeAttribute("style")
         gameOver.style.display = "none"
-        contador.textContent = "HI 0"
         imgMario.src="img/marioCorrendo.mp4"
         imgMario.classList.add("marioCorrendo")
         comecarGame = true
@@ -111,11 +120,28 @@ const gameEnd = function(){
     gameOver.style.display = "block"
     // document.addEventListener("keydown", reiniciarGame)
 }
+
+const iniciarJump = function(){
+    document.addEventListener("touchstart", jumpCelular)
+    document.addEventListener("keydown", jumpPC) 
+}
+const stopJump = function(){
+    imgMario.classList.remove("jump")
+}
 // computador 
 document.addEventListener("keydown", StartGame)
-document.addEventListener("keydown", jumpPC)
 document.addEventListener("keydown", reiniciarGame)
 //  celular 
 document.addEventListener("touchstart", StartGame)
 document.addEventListener("touchstart", reiniciarGame)
-document.addEventListener("touchstart", jumpCelular)
+
+  
+const getLocalStorage =  function (){
+    const data = JSON.parse(localStorage.getItem('scoreGame'));
+    data ? recorde = data : recorde = 0 
+}
+const setLocalStorage = function (recorde,resultado){
+    if (resultado>recorde){
+        localStorage.setItem("scoreGame",JSON.stringify(resultado))
+    }
+}

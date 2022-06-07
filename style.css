@@ -28,7 +28,6 @@
     animation: nuvem-animation1 15s infinite linear;
 }
 .nuvem2{
-    animation: nuvem-animation2 20s infinite linear;
     display: none;
     position: absolute;
     right: -800px;
@@ -60,7 +59,7 @@
     width: 40px;
 }
 .tuboMovendo{
-    animation:tubo-animation 1.5s infinite linear; 
+    animation:tubo-animation 1.2s infinite linear; 
 }
 @keyframes tubo-animation{
     from{
@@ -103,12 +102,11 @@
     }
 }
 
-.historico{
-    position: absolute;
+.historico{  
     display: none;
-    right: 30%;
-    top:40%;
-    width: 100px;
+    text-align: center;
+    top:50%;
+    position: absolute;
 }
 .gameOver{
     display: none;
@@ -124,4 +122,10 @@
 
 .hide{
     display: none;
+}
+
+@media (max-width:450px) {
+    .tuboMovendo{
+        animation:tubo-animation 0.9s infinite linear; 
+    }
 }
